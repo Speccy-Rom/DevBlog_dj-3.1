@@ -11,6 +11,3 @@ def index(request):
         'title': 'Список новостей'
     }
     return render(request, 'blog/index.html', contect)
-
-
-
