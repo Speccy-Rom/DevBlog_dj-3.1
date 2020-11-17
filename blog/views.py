@@ -1,13 +1,27 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from .models import News
+from .models import News, Category
 
 
 def index(request):
     news = News.objects.all()
-    contect = {
+    categories = Category.objects.all()
+    context = {
         'news': news,
-        'title': 'Список новостей'
+        'title': 'Список новостей',
+        'category': categories,
     }
-    return render(request, 'blog/index.html', contect)
+    return render(request, 'blog/index.html', context)
+
+
+def get_category(request, category_id):
+    news = News.objects.filter(category_id=category_id)
+    categories = Category.objects.all()
+    category = Category.objects.get(pk=category_id)
+    context_category = {
+        'news': news,
+        'categories': categories,
+        'category': category,
+    }
+    return render(request, 'blog/category.html', context_category)
