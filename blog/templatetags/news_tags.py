@@ -15,4 +15,4 @@ def get_categories():
 @register.inclusion_tag('blog/list_categories.html')
 def show_categories():
     categories = Category.objects.all()
-    return {"categories":categories}
+    return {"categories": categories}
