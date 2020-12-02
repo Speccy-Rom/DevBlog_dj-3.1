@@ -35,7 +35,8 @@ def add_news(request):
         form = NewsForm(request.POST) # форма связана с данными
         if form.is_valid(): # условие прошла ли форма валидацию
             # print(form.cleaned_data)
-            news = News.objects.create(**form.cleaned_data) # сохраняем данные введеные через форму не связанной с моделями
+            # news = News.objects.create(**form.cleaned_data) # сохраняем данные введеные через форму не связанной с моделями
+            news = form.save() # применяем метод save для форм связанных с моделями БД
             return redirect(news) # редирект на страницу новости
     else:
         form = NewsForm() # форма не связана с данными
