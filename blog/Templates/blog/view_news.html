@@ -15,17 +15,16 @@
                     Категория: <a href="{{ news_item.category.get_absolute.url }}">{{ news_item.category }}</a>
                 </div>
                 <div class="card-body">
-                    <div class="media">
+
                         {% if item.photo %}
-                            <img src="{{ news_item.photo.url }}" alt="картинка новости" width="350" class="mr-3">
+                            <img src="{{ news_item.photo.url }}" alt="картинка новости" width="350" class="float-left mr-3">
                         {% else %}
-                            <img src="https://img3.goodfon.ru/original/350x235/b/e4/elegant-background-lorem.jpg" alt="картинка новости" class="mr-3">
+                            <img src="https://img3.goodfon.ru/original/350x235/b/e4/elegant-background-lorem.jpg" alt="картинка новости" class="float-left mr-3">
                         {% endif %}
-                        <div class="media-body">
+
                             <h5 class="card-title {% cycle 'text-danger' 'text-success' %}">{{ news_item.title }}</h5>
                             <p class="card-text">{{ news_item.content|linebreaks }}</p>
-                        </div>
-                    </div>
+
                 </div>
                 <div class="card-footer text-muted">
                     {{news_item.created_at|date:"Y-m-d H:i:s"}}
