@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
 
 from .models import News, Category
 from .forms import NewsForm
@@ -37,7 +38,16 @@ class NewsByCategory(ListView):
                                    is_published=True)  # снимает с будликации запись (со стороны фронтенда)
 
 
+class ViewNews(DetailView):
+    model = News
+    # pk_url_kwarg = 'news_id'
+    context_object_name = 'news_item'
 
+
+class CreateNews(CreateView):
+    form_class = NewsForm
+    template_name = 'blog/add_news.html'
+    success_url = reverse_lazy('home')   ## редирект на главную
 
 # def index(request):
 #     news = News.objects.all()
@@ -59,20 +69,20 @@ class NewsByCategory(ListView):
 #     return render(request, 'blog/category.html', context_category)
 
 
-def view_news(request, news_id):
-    # news_item = News.objects.get(pk=news_id)
-    news_item = get_object_or_404(News, pk=news_id)
-    return render(request, 'blog/view_news.html', {'news_item': news_item})
+# def view_news(request, news_id):
+#     # news_item = News.objects.get(pk=news_id)
+#     news_item = get_object_or_404(News, pk=news_id)
+#     return render(request, 'blog/view_news.html', {'news_item': news_item})
 
 
-def add_news(request):
-    if request.method == 'POST':
-        form = NewsForm(request.POST)  # форма связана с данными
-        if form.is_valid():  # условие прошла ли форма валидацию
-            # print(form.cleaned_data)
-            # news = News.objects.create(**form.cleaned_data) # сохраняем данные введеные через форму не связанной с моделями
-            news = form.save()  # применяем метод save для форм связанных с моделями БД
-            return redirect(news)  # редирект на страницу новости
-    else:
-        form = NewsForm()  # форма не связана с данными
-    return render(request, 'blog/add_news.html', {'form': form})
+# def add_news(request):
+#     if request.method == 'POST':
+#         form = NewsForm(request.POST)  # форма связана с данными
+#         if form.is_valid():  # условие прошла ли форма валидацию
+#             # print(form.cleaned_data)
+#             # news = News.objects.create(**form.cleaned_data) # сохраняем данные введеные через форму не связанной с моделями
+#             news = form.save()  # применяем метод save для форм связанных с моделями БД
+#             return redirect(news)  # редирект на страницу новости
+#     else:
+#         form = NewsForm()  # форма не связана с данными
+#     return render(request, 'blog/add_news.html', {'form': form})
