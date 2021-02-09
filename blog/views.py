@@ -10,6 +10,7 @@ class HomeNews(ListView):
     model = News
     template_name = 'blog/home.html'
     context_object_name = 'blog'
+    # queryset = News.objects.select_related('category')
 
     # extra_context = {'title': 'Главная'}
 
@@ -19,7 +20,7 @@ class HomeNews(ListView):
         return context
 
     def get_queryset(self):
-        return News.objects.filter(is_published=True)  # снимает с будликации запись (со стороны фронтенда)
+        return News.objects.filter(is_published=True).select_related('category')  # снимает с будликации запись (со стороны фронтенда)
 
 
 class NewsByCategory(ListView):
@@ -27,6 +28,7 @@ class NewsByCategory(ListView):
     template_name = 'blog/home.html'
     context_object_name = 'blog'
     allow_empty = False
+    # queryset = News.objects.select_related('category')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -35,7 +37,7 @@ class NewsByCategory(ListView):
 
     def get_queryset(self):
         return News.objects.filter(category_id=self.kwargs['category_id'],
-                                   is_published=True)  # снимает с будликации запись (со стороны фронтенда)
+                                   is_published=True).('category')  # снимает с будликации запись (состороны фронтенда)
 
 
 class ViewNews(DetailView):
@@ -47,7 +49,9 @@ class ViewNews(DetailView):
 class CreateNews(CreateView):
     form_class = NewsForm
     template_name = 'blog/add_news.html'
-    success_url = reverse_lazy('home')   ## редирект на главную
+    success_url = reverse_lazy('home')  ## редирект на главную
+    # queryset = News.objects.select_related('category')
+
 
 # def index(request):
 #     news = News.objects.all()
