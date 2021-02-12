@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import News, Category
 from .forms import NewsForm
@@ -37,7 +38,7 @@ class NewsByCategory(ListView):
 
     def get_queryset(self):
         return News.objects.filter(category_id=self.kwargs['category_id'],
-                                   is_published=True).('category')  # снимает с будликации запись (состороны фронтенда)
+                                   is_published=True).select_related('category')  # снимает с будликации запись (состороны фронтенда)
 
 
 class ViewNews(DetailView):
@@ -46,12 +47,12 @@ class ViewNews(DetailView):
     context_object_name = 'news_item'
 
 
-class CreateNews(CreateView):
+class CreateNews(LoginRequiredMixin, CreateView):
     form_class = NewsForm
     template_name = 'blog/add_news.html'
     success_url = reverse_lazy('home')  ## редирект на главную
-    # queryset = News.objects.select_related('category')
-
+    login_url = '/admin/' # редирект с крытой страницы на вход регистрации LoginRequiredMixin
+    raise_exception = True # 403 ошибка при переходе на скрытой странице LoginRequiredMixin
 
 # def index(request):
 #     news = News.objects.all()

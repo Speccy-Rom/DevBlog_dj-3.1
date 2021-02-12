@@ -12,6 +12,6 @@ def get_categories():
 
 @register.inclusion_tag('blog/list_categories.html')
 def show_categories():
-    categories = Category.objects.annotate(cnt=Count('news')).filter(cnt__gt=0)
-    # categories = Category.objects.all()
+    #categories = Category.objects.annotate(cnt=Count('news')).filter(cnt__gt=0)
+    categories = Category.objects.all()
     return {"categories": categories}
