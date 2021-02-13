@@ -2,15 +2,27 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 
 from .models import News, Category
 from .forms import NewsForm
+
+
+def listing(request):
+    # objects = ['Страница 1', 'Страница 2', 'Страница 3', 'Страница 4', 'Страница 5', 'Страница 6', 'Страница 7']
+    objects = News.objects.all()
+    paginator = Paginator(objects, 2)
+
+    page_number = request.GET.get('page', 1)
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'blog/list_page.html', {'page_obj': page_obj} )
 
 
 class HomeNews(ListView):
     model = News
     template_name = 'blog/home.html'
     context_object_name = 'blog'
+    paginate_by = 2
     # queryset = News.objects.select_related('category')
 
     # extra_context = {'title': 'Главная'}
@@ -29,6 +41,7 @@ class NewsByCategory(ListView):
     template_name = 'blog/home.html'
     context_object_name = 'blog'
     allow_empty = False
+    paginate_by = 2
     # queryset = News.objects.select_related('category')
 
     def get_context_data(self, *, object_list=None, **kwargs):

@@ -1,5 +1,5 @@
 from django import template
-from django.db.models import Count
+from django.db.models import Count, F
 from blog.models import Category
 
 register = template.Library()
@@ -12,6 +12,6 @@ def get_categories():
 
 @register.inclusion_tag('blog/list_categories.html')
 def show_categories():
-    #categories = Category.objects.annotate(cnt=Count('news')).filter(cnt__gt=0)
+    #categories = Category.objects.annotate(cnt=Count('news', filter=F('news__is_published'))).filter(cnt__gt=0)
     categories = Category.objects.all()
     return {"categories": categories}

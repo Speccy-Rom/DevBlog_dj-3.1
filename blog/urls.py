@@ -3,6 +3,7 @@ from blog.views import *
 
 
 urlpatterns = [
+    path('list_page/', listing, name='list'),
     # path('', index, name='home'),
     path('', HomeNews.as_view(), name='home'),
     # path('category/<int:category_id>/', get_category, name='category'),
